@@ -2,7 +2,7 @@
 
 import os
 
-os.chdir("/home/dyh/data/credit/person")
+os.chdir("/root/dyh/data/credit")
 
 class CreditPipeline(object):
     def process_item(self, item, spider):
