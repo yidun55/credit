@@ -11,6 +11,10 @@ import re
 import os
 from credit.items import *
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 class PersonageCreditt(Spider):
     download_delay=1
     name = 'personid'
@@ -18,7 +22,13 @@ class PersonageCreditt(Spider):
     writeInFile = "personid"
     start_urls = ['http://shixin.court.gov.cn/personMore.do']
     allowed_domains=['shixin.court.gov.cn']
-    def __init__(self):
+
+    def set_crawler(self,crawler):
+        super(PersonageCreditt, self).set_crawler(crawler)
+        self.bind_signal()
+
+
+    def bind_signal(self):
         self.crawler.signals.connect(self.open_file, \
             signal=signals.spider_opened)  #爬虫开启时，打开文件
         self.crawler.signals.connect(self.close_file, \
@@ -26,7 +36,7 @@ class PersonageCreditt(Spider):
 
     def open_file(self):
         os.chdir("/home/dyh/data/credit/personid")
-        self.file_handler = open("writeInFile", "a")
+        self.file_handler = open(self.writeInFile, "a")
 
     def close_file(self):
         self.file_handler.close()
@@ -39,7 +49,7 @@ class PersonageCreditt(Spider):
         try:
             total = sel.xpath(u"//a[contains(text(),'尾页')]/@onclick").extract()[0]
             total = int(re.findall("\d+",total)[0])
-            for i in range(1,total+1)[0:100]:
+            for i in range(1,total+1):
                 yield FormRequest(response.url,
                         formdata={'currentPage': str(i)},
                         headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'},
@@ -58,7 +68,7 @@ class PersonageCreditt(Spider):
             for da in datalist:
     #            name = da.select('td[2]/a/text()').extract()[0]
     #            causeserial = da.select('td[3]/text()').extract()[0]
-                causedate = da.select('td[4]/text()').extract()[0]
+                causedate = da.xpath('td[4]/text()').extract()[0]
                 id = da.xpath('./td[6]/a/@id').extract()[0]
                 content = content + str(id) + "\001" + causedate + "\n"
             item["content"] = content

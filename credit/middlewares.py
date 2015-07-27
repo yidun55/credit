@@ -38,7 +38,7 @@ class RecordWrongPageMiddleware(object):
     EXCEPTIONS_TO_RETRY = (defer.TimeoutError, TimeoutError, DNSLookupError,
             ConnectionRefusedError, ConnectionDone, ConnectError,
             ConnectionLost, TCPTimedOutError, ResponseFailed,
-            IOError, UnknownResponseError, ForbbidenResponseError)
+            IOError, UnknownResponseError)
 
 
     def process_spider_exception(self, response, exception, spider):

@@ -11,6 +11,8 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
 LOG_FILE = '/home/dyh/data/credit/personid/log_personid'
 
+RETRY_ENABLED = False
+
 SPIDER_MIDDLEWARES = {
     #状态码非200的响应
     'credit.middlewares.Not200Middleware': 48,
