@@ -43,10 +43,11 @@ class RecordWrongPageMiddleware(object):
 
     def process_spider_exception(self, response, exception, spider):
         if isinstance(exception, self.EXCEPTIONS_TO_RETRY):
+            request = response.request
             pageNum = request.meta.get('pageNum', 0)
             log.msg(format="middleware_undown %(request)s %(reason)s \
                 pageNum=%(pageNum)s",
-                    level=log.ERROR, request=request,reason=reason,\
+                level=log.ERROR, request=request,reason=exception,\
                     pageNum=pageNum)
             return []
 
@@ -62,10 +63,11 @@ class Not200Middleware(object):
 
     def process_spider_exception(self, response, exception, spider):
             if isinstance(exception, Not200Error):
+                request = response.request
                 pageNum = request.meta.get('pageNum', 0)
                 log.msg(format="middleware_undown %(request)s %(reason)s \
                     pageNum=%(pageNum)s",
-                        level=log.ERROR, request=request,reason=reason,\
+                    level=log.ERROR, request=request,reason=exception,\
                         pageNum=pageNum)
                 return []
 
@@ -80,6 +82,6 @@ class DownloadTimeoutRetryMiddleware(object):
             pageNum = request.meta.get('pageNum', 0)
             log.msg(format="middleware_undown %(request)s %(reason)s \
                 pageNum=%(pageNum)s",
-                    level=log.ERROR, request=request,reason=reason,\
+                level=log.ERROR, request=request,reason=exception,\
                     pageNum=pageNum)
             return 
