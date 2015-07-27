@@ -59,10 +59,9 @@ class Not200Middleware(object):
             raise Not200Error
 
     def process_spider_exception(self, response, exception, spider):
-        if isinstance(exception, self.EXCEPTIONS_TO_RETRY):
-            retries = request.meta.get('pageNum', 0)
-            log.msg(format="middleware_undown %(request)s %(reason)s",
-                    level=log.ERROR, request=request,reason=reason)
-            return []
+        retries = request.meta.get('pageNum', 0)
+        log.msg(format="middleware_undown %(request)s %(reason)s",
+                level=log.ERROR, request=request,reason=reason)
+        return []
 
 
