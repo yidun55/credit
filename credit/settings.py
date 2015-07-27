@@ -9,4 +9,12 @@ DEFAULT_ITEM_CLASS = 'credit.items.CreditItem'
 ITEM_PIPELINES=['credit.pipelines.CreditPipeline']
 USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
-LOG_FILE = '/home/dyh/data/credit/person/log_personMore'
+LOG_FILE = '/home/dyh/data/credit/personid/log_personid'
+
+SPIDER_MIDDLEWARES = {
+    #状态码非200的响应
+    'credit.middlewares.Not200Middleware': 48,
+    
+    #处理常见的连接超时等错误
+    'credit.middlewares.RecordWrongPageMiddleware': 930
+}

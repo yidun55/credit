@@ -76,3 +76,9 @@ class UnitMore(Item):
             self['publishDate'] = ""
         else:
             Item.__init__(self,item)
+
+class IdItem(Item):
+    """
+    用于存贮id
+    """
+    content = Field()
