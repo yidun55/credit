@@ -43,9 +43,11 @@ class RecordWrongPageMiddleware(object):
 
     def process_spider_exception(self, response, exception, spider):
         if isinstance(exception, self.EXCEPTIONS_TO_RETRY):
-            retries = request.meta.get('pageNum', 0)
-            log.msg(format="middleware_undown %(request)s %(reason)s",
-                    level=log.ERROR, request=request,reason=reason)
+            pageNum = request.meta.get('pageNum', 0)
+            log.msg(format="middleware_undown %(request)s %(reason)s \
+                pageNum=%(pageNum)s",
+                    level=log.ERROR, request=request,reason=reason,\
+                    pageNum=pageNum)
             return []
 
 
@@ -59,9 +61,25 @@ class Not200Middleware(object):
             raise Not200Error
 
     def process_spider_exception(self, response, exception, spider):
-        retries = request.meta.get('pageNum', 0)
-        log.msg(format="middleware_undown %(request)s %(reason)s",
-                level=log.ERROR, request=request,reason=reason)
-        return []
+            if isinstance(exception, Not200Error):
+                pageNum = request.meta.get('pageNum', 0)
+                log.msg(format="middleware_undown %(request)s %(reason)s \
+                    pageNum=%(pageNum)s",
+                        level=log.ERROR, request=request,reason=reason,\
+                        pageNum=pageNum)
+                return []
 
+class DownloadTimeoutRetryMiddleware(object):
+    EXCEPTIONS_TO_RETRY = (defer.TimeoutError, TimeoutError, DNSLookupError,
+            ConnectionRefusedError, ConnectionDone, ConnectError,
+            ConnectionLost, TCPTimedOutError, ResponseFailed,
+            IOError)
 
+    def process_exception(self, request, exception, spider):
+        if isinstance(exception, self.EXCEPTIONS_TO_RETRY) :
+            pageNum = request.meta.get('pageNum', 0)
+            log.msg(format="middleware_undown %(request)s %(reason)s \
+                pageNum=%(pageNum)s",
+                    level=log.ERROR, request=request,reason=reason,\
+                    pageNum=pageNum)
+            return 

@@ -20,3 +20,13 @@ SPIDER_MIDDLEWARES = {
     #处理常见的连接超时等错误
     'credit.middlewares.RecordWrongPageMiddleware': 930
 }
+
+DOWNLOADER_MIDDLEWARES = {
+    # This middleware sets the download timeout for requests specified in the DOWNLOAD_TIMEOUT setting.
+    'scrapy.contrib.downloadermiddleware.downloadtimeout.DownloadTimeoutMiddleware': 350,
+
+    # handle downloadtimeout error
+    'credit.middlewares.DownloadTimeoutRetryMiddleware': 375,
+
+}
+
