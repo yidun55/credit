@@ -15,7 +15,7 @@ import time
 class PersonageCreditt(Spider):
     download_delay=0
     name = 'unit_increment'
-    last_update_date = '2015年07月22日'  #已有数据的最新更新日期
+    last_update_date = '2015年06月25日'  #已有数据的最新更新日期
     page = 1    #记录已经请求的页面数
     handle_httpstatus_all = True
     writeInFile = "uniteMore"
@@ -36,6 +36,7 @@ class PersonageCreditt(Spider):
             try:
                 a = last_update_stamp #记录本次页面的最早的更新时间
                 reqs = []  #贮存请求
+                isTheLastPage = False
                 for da in datalist:
                     causedate = da.select('td[4]/text()').extract()[0]
                     tm_struct = time.strptime(causedate,'%Y年%m月%d日')
@@ -46,15 +47,19 @@ class PersonageCreditt(Spider):
                         req = Request(url,callback=self.detail,meta={"url":url})
                         reqs.append(req)
                     else:
+                        isTheLastPage = True
                         break
+                        
+                if not isTheLastPage:
                     self.page += 1
                     req = FormRequest(response.url,
                             formdata={'currentPage': str(self.page)},
                             headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'},
                             callback=self.gettotal,dont_filter=True,meta={'page':str(i)})
                     reqs.insert(0, req)
-                    for req in reqs:
-                        yield req
+
+                for req in reqs:
+                    yield req
 
             except Exception, e:
                 log.msg("datalist error_info=%s, url=%s" %(e,response.url),level=log.ERROR)
