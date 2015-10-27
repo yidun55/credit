@@ -82,3 +82,9 @@ class IdItem(Item):
     用于存贮id
     """
     content = Field()
+
+class simpleItem(Item):
+    """
+    简化后的item
+    """
+    con = Field()

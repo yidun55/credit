@@ -13,7 +13,7 @@ import base64
 import time
 
 class PersonageCreditt(Spider):
-    download_delay=0
+    download_delay=1
     name = 'unit_increment'
     last_update_date = '2015年06月25日'  #已有数据的最新更新日期
     page = 1    #记录已经请求的页面数
@@ -25,7 +25,8 @@ class PersonageCreditt(Spider):
         pass
 
     def make_requests_from_url(self,url):
-        return Request(url, callback=self.gettotal,dont_filter=True )
+        return Request(url, headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'},\
+            callback=self.gettotal,dont_filter=True )
 
     def gettotal(self,response):
         if response.status == 200:

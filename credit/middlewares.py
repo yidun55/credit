@@ -62,13 +62,22 @@ class Not200Middleware(object):
             raise Not200Error
 
     def process_spider_exception(self, response, exception, spider):
-            if isinstance(exception, Not200Error):
-                request = response.request
-                pageNum = request.meta.get('pageNum', 0)
-                log.msg(format="middleware_undown %(request)s %(reason)s \
-                    pageNum=%(pageNum)s",
-                    level=log.ERROR, request=request,reason=exception,\
-                        pageNum=pageNum)
+        if isinstance(exception, Not200Error):
+            log.msg(
+                    format="Ignoring response %(response)r: 302 deleted",
+                    level=log.WARNING,
+                    spider=spider,
+                    response=response
+            )
+            request = response.request.copy()
+            retries = request.meta.get('retry_times', 0)
+            if retries <=3:
+                retries += 1
+                request.meta['retry_times'] = retries
+                request.dont_filter = True
+                return [request]
+            else:
+                log.msg("give_up_ul==%s=="%request.url, level=log.ERROR)
                 return []
 
 class DownloadTimeoutRetryMiddleware(object):
