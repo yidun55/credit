@@ -28,5 +28,5 @@ DOWNLOADER_MIDDLEWARES = {
     # handle downloadtimeout error
     'credit.middlewares.DownloadTimeoutRetryMiddleware': 375,
 
+    'scrapy.contrib.downloadermiddleware.redirect.RedirectMiddleware': None,
 }
-
