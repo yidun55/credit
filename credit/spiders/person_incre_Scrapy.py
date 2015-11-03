@@ -14,7 +14,7 @@ import base64
 import redis
 
 class PersonageCreditt(Spider):
-    download_delay=1
+    download_delay=0.5
     name = 'person_incre'
     handle_httpstatus_all = True
     myRedis = redis.StrictRedis(host='localhost',port=6379) #connected to redis
@@ -22,27 +22,13 @@ class PersonageCreditt(Spider):
     # writeInFile = "E:/DLdata/person_2015_10_27.txt"
     controlFile = "/home/dyh/data/credit/person/person_control.txt"
     # controlFile = "E:/DLdata/person_control.txt"
-    start_urls = ['http://shixin.court.gov.cn/personMore.do']
-    allowed_domains=['shixin.court.gov.cn']
+    start_urls = ['http://www.baidu.com']
     order = ["cid","name","caseCode","age","sex",\
         "cardNum","courtName","areaName","partyTypeName",\
         "gistId","regDate","gistUnit","duty","performance",\
         "disruptTypeName","publishDate"] #writeIn for personMore
+
     def __init__(self):
-        pass
-
-    def set_crawler(self,crawler):
-        super(PersonageCreditt, self).set_crawler(crawler)
-        self.bind_signal()
-
-
-    def bind_signal(self):
-        self.crawler.signals.connect(self.open_file, \
-            signal=signals.spider_opened)  #爬虫开启时，打开文件
-        self.crawler.signals.connect(self.close_file, \
-            signal=signals.spider_closed)  #爬虫关闭时，关闭文件
-
-    def open_file(self):
         self.file_handler = open(self.writeInFile, "a")
         self.file_control = open(self.controlFile, "a+")
         self.url_have_seen = "dup_person"
@@ -55,8 +41,6 @@ class PersonageCreditt(Spider):
         fp = request_fingerprint(req)
         return fp 
 
-    def close_file(self):
-        self.file_handler.close()
 
     def make_requests_from_url(self,url):
         return Request( url, callback=self.gettotal,dont_filter=True )
@@ -67,7 +51,7 @@ class PersonageCreditt(Spider):
             # total = int(re.findall("\d+",total)[0])
             total = 40000   #页数
             url = "http://shixin.court.gov.cn/personMore.do"
-            for i in range(1,total+1)[0:2]:
+            for i in xrange(1,total+1):
                 yield FormRequest(url,
                         formdata={'currentPage': str(i)},
                         headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'},
@@ -94,9 +78,9 @@ class PersonageCreditt(Spider):
                     else:
                         pass
             except Exception,e:
-                log.msg("datalist error_info=%s, url=%s,pageNum=%s" %(e, response.url,meta['pageNum']),level=log.ERROR)
+                log.msg("datalist error_info=%s, url=%s,pageNum=%s" %(e, response.url,response.meta['pageNum']),level=log.ERROR)
         else:
-            log.msg("undowndloaded page=%s" %meta["pageNum"],level=log.ERROR) #当请求不成立的状况下记录下页数
+            log.msg("undowndloaded page=%s" %response.meta["pageNum"],level=log.ERROR) #当请求不成立的状况下记录下页数
     
     def for_ominated_data(self,in_dict, tag_str,response):
         """
@@ -144,7 +128,7 @@ class PersonageCreditt(Spider):
                 log.msg("item error_info=%s url=%s item_key=%s" %(e, response.url,"\001".join(str(i) for i in [item.values()])), level=log.ERROR)
             yield item
         else:
-            log.msg("undownloaded info url=%s"%meta["url"],level=log.ERROR)   #如果请求不成功（状态码不为200）记录下来
+            log.msg("undownloaded info url=%s"%response.meta["url"],level=log.ERROR)   #如果请求不成功（状态码不为200）记录下来
 
 
 
