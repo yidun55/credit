@@ -4,17 +4,20 @@
 """
 from scrapy.spider import Spider
 from scrapy.http import Request,FormRequest
+from scrapy import Selector
 from scrapy.utils.request import request_fingerprint
 from scrapy import signals
 from scrapy import log
 import re
 from credit.items import *
 import base64
+import redis
 
 class PersonageCreditt(Spider):
     download_delay=1
     name = 'person_incre'
     handle_httpstatus_all = True
+    myRedis = redis.StrictRedis(host='localhost',port=6379) #connected to redis
     writeInFile = "/home/dyh/data/credit/person/person_2015_10_27.txt"
     # writeInFile = "E:/DLdata/person_2015_10_27.txt"
     controlFile = "/home/dyh/data/credit/person/person_control.txt"
@@ -42,10 +45,10 @@ class PersonageCreditt(Spider):
     def open_file(self):
         self.file_handler = open(self.writeInFile, "a")
         self.file_control = open(self.controlFile, "a+")
-        self.url_have_seen = set()
+        self.url_have_seen = "dup_person"
         for line in self.file_control:
             fp = self.url_fingerprint(line)
-            self.url_have_seen.add(fp)        
+            self.myRedis.sadd(self.url_have_seen,fp)     
 
     def url_fingerprint(self, url):
         req = Request(url.strip())
@@ -59,7 +62,6 @@ class PersonageCreditt(Spider):
         return Request( url, callback=self.gettotal,dont_filter=True )
 
     def gettotal(self,response):
-        hxs = response.selector
         try:
             # total = hxs.xpath(u"//a[contains(text(),'尾页')]/@onclick").extract()[0]
             # total = int(re.findall("\d+",total)[0])
@@ -75,7 +77,7 @@ class PersonageCreditt(Spider):
 
     def listpare(self, response):
         if response.status == 200:
-            hxs = response.selector
+            hxs = Selector(text=response.body)
             datalist =  hxs.xpath("//table[@id='Resultlist']/tbody/tr[position()>1]")
             if len(datalist) == 0:
                 log.msg("datalist_empty error_info, url=%s,pageNum=%s" %(response.url,response.meta['pageNum']),level=log.ERROR)
@@ -84,13 +86,13 @@ class PersonageCreditt(Spider):
                     id = da.xpath('./td[6]/a/@id').extract()[0]
                     url ="http://shixin.court.gov.cn/detail?id=%s" % id
                     fp = self.url_fingerprint(url)
-                    if fp not in self.url_have_seen:
-                        self.url_have_seen.add(fp)
+                    isexist = self.myRedis.sadd(self.url_have_seen,fp)
+                    if isexist:
+                        #如果redis set ppai_dup_redis没有则插入并返回1，否则
+                        #返回0
                         yield Request(url,callback=self.detail,meta={'url':url})
                     else:
                         pass
-
-
             except Exception,e:
                 log.msg("datalist error_info=%s, url=%s,pageNum=%s" %(e, response.url,meta['pageNum']),level=log.ERROR)
         else:

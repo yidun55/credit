@@ -6,7 +6,7 @@ BOT_VERSION = '1.0'
 SPIDER_MODULES = ['credit.spiders']
 NEWSPIDER_MODULE = 'credit.spiders'
 DEFAULT_ITEM_CLASS = 'credit.items.CreditItem'
-ITEM_PIPELINES=['credit.pipelines.CreditPipeline']
+ITEM_PIPELINES={'credit.pipelines.CreditPipeline':0}
 USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
 #LOG_FILE = '/home/dyh/data/credit/unit/log_unit_increment'
@@ -30,3 +30,5 @@ DOWNLOADER_MIDDLEWARES = {
 
     'scrapy.contrib.downloadermiddleware.redirect.RedirectMiddleware': None,
 }
+
+LOG_LEVEL = 'INFO'
