@@ -18,7 +18,7 @@ class PersonageCreditt(Spider):
     name = 'person_incre'
     handle_httpstatus_all = True
     myRedis = redis.StrictRedis(host='localhost',port=6379) #connected to redis
-    writeInFile = "/home/dyh/data/credit/person/person_2015_10_27.txt"
+    writeInFile = "/home/dyh/data/credit/person/person_%s.txt"
     # writeInFile = "E:/DLdata/person_2015_10_27.txt"
     controlFile = "/home/dyh/data/credit/person/person_control.txt"
     # controlFile = "E:/DLdata/person_control.txt"
@@ -29,7 +29,7 @@ class PersonageCreditt(Spider):
         "disruptTypeName","publishDate"] #writeIn for personMore
 
     def __init__(self):
-        self.file_handler = open(self.writeInFile, "a")
+        self.file_handler = open(self.writeInFile%time.strftime("%Y_%m_%d"), "a")
         self.file_control = open(self.controlFile, "a+")
         self.url_have_seen = "dup_person"
         for line in self.file_control:
