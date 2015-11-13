@@ -9,7 +9,7 @@ DEFAULT_ITEM_CLASS = 'credit.items.CreditItem'
 ITEM_PIPELINES={'credit.pipelines.CreditPipeline':0}
 USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
-LOG_FILE = '/home/dyh/data/credit/person/log'
+LOG_FILE = '/home/dyh/data/credit/unit/log'
 
 RETRY_ENABLED = False
 

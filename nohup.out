@@ -5,3 +5,47 @@
 /home/dyh/spiders/credit/credit/spiders/courtScrapy.py:12: ScrapyDeprecationWarning: credit.spiders.courtScrapy.PersonageCreditt inherits from deprecated class scrapy.spiders.BaseSpider, please inherit from scrapy.spiders.Spider. (warning only on first subclass, there may be others)
 /home/dyh/spiders/credit/credit/spiders/personScrapy.py:8: ScrapyDeprecationWarning: Module `scrapy.log` has been deprecated, Scrapy now relies on the builtin Python library for logging. Read the updated logging entry in the documentation to learn more.
   from scrapy import log
+/usr/local/lib/python2.7/site-packages/scrapy/settings/deprecated.py:26: ScrapyDeprecationWarning: You are using the following settings which are deprecated or obsolete (ask scrapy-users@googlegroups.com for alternatives):
+    BOT_VERSION: no longer used (user agent defaults to Scrapy now)
+  warnings.warn(msg, ScrapyDeprecationWarning)
+/home/dyh/spiders/credit/credit/spiders/courtScrapy.py:12: ScrapyDeprecationWarning: credit.spiders.courtScrapy.PersonageCreditt inherits from deprecated class scrapy.spider.BaseSpider, please inherit from scrapy.spider.Spider. (warning only on first subclass, there may be others)
+Traceback (most recent call last):
+  File "/usr/local/bin/scrapy", line 11, in <module>
+    sys.exit(execute())
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 143, in execute
+    _run_print_help(parser, _run_command, cmd, args, opts)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 89, in _run_print_help
+    func(*a, **kw)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 150, in _run_command
+    cmd.run(args, opts)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/commands/crawl.py", line 58, in run
+    spider = crawler.spiders.create(spname, **opts.spargs)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/spidermanager.py", line 48, in create
+    return spcls(**spider_kwargs)
+  File "/home/dyh/spiders/credit/credit/spiders/unit_incre_creditScrapy.py", line 39, in __init__
+    logging.ERROR("__init__ url=%s, e=%s"%(line.strip(),e))         
+TypeError: 'int' object is not callable
+/usr/local/lib/python2.7/site-packages/scrapy/settings/deprecated.py:26: ScrapyDeprecationWarning: You are using the following settings which are deprecated or obsolete (ask scrapy-users@googlegroups.com for alternatives):
+    BOT_VERSION: no longer used (user agent defaults to Scrapy now)
+  warnings.warn(msg, ScrapyDeprecationWarning)
+/home/dyh/spiders/credit/credit/spiders/courtScrapy.py:12: ScrapyDeprecationWarning: credit.spiders.courtScrapy.PersonageCreditt inherits from deprecated class scrapy.spider.BaseSpider, please inherit from scrapy.spider.Spider. (warning only on first subclass, there may be others)
+Traceback (most recent call last):
+  File "/usr/local/bin/scrapy", line 11, in <module>
+    sys.exit(execute())
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 143, in execute
+    _run_print_help(parser, _run_command, cmd, args, opts)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 89, in _run_print_help
+    func(*a, **kw)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 150, in _run_command
+    cmd.run(args, opts)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/commands/crawl.py", line 58, in run
+    spider = crawler.spiders.create(spname, **opts.spargs)
+  File "/usr/local/lib/python2.7/site-packages/scrapy/spidermanager.py", line 48, in create
+    return spcls(**spider_kwargs)
+  File "/home/dyh/spiders/credit/credit/spiders/unit_incre_creditScrapy.py", line 39, in __init__
+    logging.ERROR("__init__ url=%s, e=%s"%(line.strip(),e))         
+TypeError: 'int' object is not callable
+/usr/local/lib/python2.7/site-packages/scrapy/settings/deprecated.py:26: ScrapyDeprecationWarning: You are using the following settings which are deprecated or obsolete (ask scrapy-users@googlegroups.com for alternatives):
+    BOT_VERSION: no longer used (user agent defaults to Scrapy now)
+  warnings.warn(msg, ScrapyDeprecationWarning)
+/home/dyh/spiders/credit/credit/spiders/courtScrapy.py:12: ScrapyDeprecationWarning: credit.spiders.courtScrapy.PersonageCreditt inherits from deprecated class scrapy.spider.BaseSpider, please inherit from scrapy.spider.Spider. (warning only on first subclass, there may be others)
