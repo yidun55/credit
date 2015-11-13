@@ -12,13 +12,14 @@ import re
 from credit.items import *
 import base64
 import redis
+import time
 
 class PersonageCreditt(Spider):
     download_delay=0.5
     name = 'person_incre'
     handle_httpstatus_all = True
     myRedis = redis.StrictRedis(host='localhost',port=6379) #connected to redis
-    writeInFile = "/home/dyh/data/credit/person/person_%s.txt"
+    writeInFile = "/home/dyh/data/credit/person/add_%s.txt"
     # writeInFile = "E:/DLdata/person_2015_10_27.txt"
     controlFile = "/home/dyh/data/credit/person/person_control.txt"
     # controlFile = "E:/DLdata/person_control.txt"
@@ -49,7 +50,7 @@ class PersonageCreditt(Spider):
         try:
             # total = hxs.xpath(u"//a[contains(text(),'尾页')]/@onclick").extract()[0]
             # total = int(re.findall("\d+",total)[0])
-            total = 40000   #页数
+            total = 70000   #页数
             url = "http://shixin.court.gov.cn/personMore.do"
             for i in xrange(1,total+1):
                 yield FormRequest(url,
